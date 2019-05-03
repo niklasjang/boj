@@ -1,0 +1,38 @@
+1. 전역변수는 모두 0으로 초기화된다. 따라서 bool type 변수와 배열은 false로 초기화된다.
+2. 지역변수는 초기화 없이 사용할 수 없다. 그런데 지역변수의 배열은 초기화 없이 사용해도 에러가 안뜬다. 하지만 default 값은 예측할 수 없는 값이 사용된다.
+3. memset은 for보다 더 빠른 속도가 나올수가 있다. 여기서 나올수가 있다라고 표현한 이유는 컴파일러 그리고 컴퓨터 아키텍처에 따라서 다르기 때문이다.
+4. cout << i << '\n';는 빨라서 정답이고, cout<< i <<endl;는 느려서 시간 초과로 틀림
+5. cout is faster than printf.
+
+	For double values std::cout is a little slower but still reasonably closer to his C counterpart. For int and char* printing std::cout is faster than printf.
+	Not sure what compiler is used by codeforces, for what I was able to find here it should be used g++. So again, std::cout should be preferred over printf unless 
+	the output is of type double. Looks like also that std::cin is faster than scanf.
+
+6. cin/cout 시간초과 해결법 : C/C++ 입출력 방법에 따른 속도 정리 : 아래 링크 읽기
+	https://eine.tistory.com/entry/CC-%EC%9E%85%EC%B6%9C%EB%A0%A5-%EB%B0%A9%EB%B2%95%EC%97%90-%EB%94%B0%EB%A5%B8-%EC%86%8D%EB%8F%84-%EC%A0%95%EB%A6%AC
+	ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
+
+	6-1.ios::sync_with_stdio(false);
+	 ios::sync_with_stdio는 cpp의 iostream을 c의 stdio와 동기화시켜주는 역할을 합니다. 
+	 이는 iostream, stdio의 버퍼를 모두 사용하기 때문에 딜레이가 발생하게 됩니다. 
+	 ios::sync_with_stdio(false)는 이 동기화 부분을 끊는 함수입니다. 이를 사용하면 c++만의 독립적인 버퍼를 생성하게 되고 
+	 c의 버퍼들과는 병행하여 사용할 수 없게 됩니다. 대신 사용하는 버퍼의 수가 줄어들었기 때문에 속도는 높아지게 됩니다.
+	6-2.cin.tie(NULL);
+	디폴트는 cout,cin이 tie되어 있습니다.
+	만약 cout << "hi"; cin >> name; 이 순서라면 디폴트의 경우 "hi"가 먼저 출력되고 name을 입력할 것입니다. 
+	그러나 untie의 경우엔 cout으로부터 cin을 untie해주기 때문에 먼저 입력부터 하게 됩니다. 
+	그러나 "hi"는 보이지 않는데, cout은 디폴트에서는 출력명령을 내리거나 버퍼가 가득찼을 경우에만 flushed되고 출력되기 때문입니다.
+	따라서 cin을 cout에서 untie하고 싶다면 cin으로 입력하기 전에 cout으로 출력을 할 때마다 지속적으로 flush를 해줘야 합니다.
+	출처: https://codecollector.tistory.com/381 [뽕뽑기]
+
+7.  백준 14888번..최댓값과 최솟값은 항상 -10억보다 크거나 같고, 10억보다 작거나 같은 결과가 나오는 입력만 주어진다.
+이렇게 나와있으면 최대 최소가 +-10억까지 입력이 가능하게 코딩해야한다. 적당히 작은 값으로 int ans_max = -1000000이렇게만 해두면 최대 최소가 모두 -10억인 경우를 커버하지 못한다.
+지랄 맞은 케이스다. int MAX = 0xFFFFFFF( F 7개까지 int, 8개부터 uint형으로 바뀜)으로 int big = -MAX; int small = +MAX;이렇게 하자. MAX MIN은 이미 정의된 변수이름이다.
+
+
+inline int bigger(int a, int b) { return a > b ? a : b; }
+inline int smaller(int a, int b) { return a < b ? a : b; }
+ans_max = bigger(result, ans_max);
+ans_min = smaller(result, ans_min);
+

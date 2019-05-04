@@ -23,7 +23,7 @@ using namespace std;
 int N = 0, M = 0, index;
 int arr[9];
 int num[9];
-bool check[9];
+bool color[9];
 
 void go(int index) {
 	if (index == M) {

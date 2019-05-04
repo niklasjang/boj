@@ -35,12 +35,12 @@ int n = 100; // 100까지 소수
 using namespace std;
 
 const int MAX = 1000000;
-bool check[MAX+1]; //왜 +1이지? //true : 지워짐. false : 지워지지 않음
+bool color[MAX+1]; //왜 +1이지? //true : 지워짐. false : 지워지지 않음
 
 int main() {
-	check[0] = check[1] = true; //여기 올림
+	color[0] = color[1] = true; //여기 올림
 	for (int i = 2; i*i<= MAX; i++) {
-		if (check[i] == false) {
+		if (color[i] == false) {
 			/*
 			if (M <= i) {
 				cout << i << endl;
@@ -49,7 +49,7 @@ int main() {
 			*/
 			
 			for (int j = i + i; j <= MAX; j += i) { //long long j = i*i해도 되나?
-				check[j] = true;
+				color[j] = true;
 			}
 		}
 	}
@@ -59,7 +59,7 @@ int main() {
 	cin >> M >> N;
 
 	for (int i = M; i < N + 1; i++) {
-		if (check[i] == false)
+		if (color[i] == false)
 			cout << i << '\n';
 	}
 	return 0;

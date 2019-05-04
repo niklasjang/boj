@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <list>
 int main()
 {
@@ -14,6 +15,7 @@ int main()
 	}
 	std::cout << *it << std::endl;
 	return 0;
+	vector<int> a;
 }
 자연수  a,b,c에 대해서 ax +by = c 이 식은 c가 GCD(a,b)의 배수일 때만 정수해를 갖는다. 
 따라서 소수 P와 P의 배수가 아닌 자연수 a에 대해서  ax+py =GCD(a,p)는 정수해를 갖는 것은 자명하다. 

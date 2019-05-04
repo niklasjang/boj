@@ -21,13 +21,13 @@
 using namespace std;
 int N, M, u, v, ans=0;
 vector<int> a[1001];
-bool check[1001];
+bool color[1001];
 
 void dfs(int x) { 
-	check[x] = true;
+	color[x] = true;
 	
 	for (int i = 0; i <a[x].size(); i++) {
-		if (check[a[x][i]] == false) {
+		if (color[a[x][i]] == false) {
 			dfs(a[x][i]);
 		}
 	}
@@ -35,13 +35,13 @@ void dfs(int x) {
 
 void bfs(int x) {
 	queue<int> q;
-	check[x] = true;
+	color[x] = true;
 	q.push(x);
 	while (!q.empty()) {
 		int y = q.front(); q.pop();
 		for (int i = 0; i < a[y].size(); i++) {
-			if (check[a[y][i]] == false) {
-				check[a[y][i]] = true;
+			if (color[a[y][i]] == false) {
+				color[a[y][i]] = true;
 				q.push(a[y][i]);
 			}
 		}
@@ -66,7 +66,7 @@ int main(void) {
 
 	//모든 점에 대해서 한번씩 확인하면서 connected components를 찾는다
 	for (int i = 1; i <= N; i++) {
-		if (check[i] == false) {
+		if (color[i] == false) {
 			ans += 1;
 			bfs(i);
 		}

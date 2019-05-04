@@ -22,7 +22,7 @@
 using namespace std;
 int N = 0, M = 0, index;
 int arr[9];
-bool check[9];
+bool color[9];
 
 void go(int index) {
 	if (index == M) {
@@ -33,11 +33,11 @@ void go(int index) {
 	}
 	else {
 		for (int value = 1; value <= N; value++) {
-			if (check[value] == true) continue; //해당 숫자를 사용했었으면 continue
-			check[value] = true; //사용 안했으면 사용할 것이라서 true로 바꾸고
+			if (color[value] == true) continue; //해당 숫자를 사용했었으면 continue
+			color[value] = true; //사용 안했으면 사용할 것이라서 true로 바꾸고
 			arr[index] = value; //arr[index++]에 처음부터 중복이 없는 순열로 뽑을 것들을 저장해준다.
 			go(index + 1); //arr안에 index번째까지 골랐으면 다음 call을 한다.
-			check[value] = false; //call이 끝나면 #37번째 줄에서 사용했던 값은 다음 for문에서는 사용하지 않은 것으로 생각해야하기기 때문에(++된 value 값부터 arr[index]에 들어갈 수 있는지 확인하기 때문)
+			color[value] = false; //call이 끝나면 #37번째 줄에서 사용했던 값은 다음 for문에서는 사용하지 않은 것으로 생각해야하기기 때문에(++된 value 값부터 arr[index]에 들어갈 수 있는지 확인하기 때문)
 			//check[value] = false로 한다.
 		}
 	}

@@ -30,20 +30,20 @@ using namespace std;
 const int MAX = 1000000;
 int primeArr[MAX];
 int pn;
-bool check[MAX];
+bool color[MAX];
 
 int main(void) {
 	ios_base::sync_with_stdio(false); //REMEMBERME 참고
 	cin.tie(nullptr);
 
 	//에라토스테네스의 체
-	check[0] = check[1] = true;
+	color[0] = color[1] = true;
 
 	for (int i = 2; i*i <= MAX; i++) {
-		if (check[i] == false) {
+		if (color[i] == false) {
 			primeArr[pn++] = i;
 			for (int j = i + i; j <= MAX; j += i) {
-				check[j] = true;
+				color[j] = true;
 			}
 		}
 	}
@@ -58,7 +58,7 @@ int main(void) {
 			break;
 
 		for (int i = 1; i <pn; i++) {
-			if (check[num - primeArr[i]] == false) {
+			if (color[num - primeArr[i]] == false) {
 				cout << num << " = " << primeArr[i] << " + " << num - primeArr[i] << "\n";
 				break;
 			}

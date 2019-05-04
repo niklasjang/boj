@@ -1,8 +1,9 @@
 #include <iostream>
 #include <queue>
+#include <vector>
 using namespace std;
 int N, M;
-int node[1000 + 1];
+int index[1000 + 1];
 bool check[1000 + 1];
 int edge[1000 + 1][1000 + 1];
 
@@ -39,10 +40,8 @@ int main(void) {
 	scanf("%d %d %d", &N, &M, &V);
 
 	for (int i = 1; i < M + 1; i++) {
-		node[i] = i; //노드 번호 부여
 		scanf("%d %d", &es, &ee);
-		edge[es][ee] = 1; //에지 저장
-		edge[ee][es] = 1; //양방향 에지 저장
+		edge[es][index[es]++] = 1; //에지 저장
 	}
 	dfs(V);
 	printf("\n");

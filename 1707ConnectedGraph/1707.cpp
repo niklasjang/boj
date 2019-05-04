@@ -1,5 +1,5 @@
 /*
-2019-00-00
+2019-05-04
 장환석
 
 문제
@@ -14,44 +14,64 @@
 K개의 줄에 걸쳐 입력으로 주어진 그래프가 이분 그래프이면 YES, 아니면 NO를 순서대로 출력한다.
 
 */
-
-#include <iostream>
+#include <cstdio>
+#include <algorithm>
+#include <cstring>
 #include <vector>
 using namespace std;
 
-int K, N, M;
 vector<int> a[20001];
-int check[20001]; //default = 0, group A = 1, group B = 2
+int color[20001]; //0 :defulat, 1, Group A, 2: Group 2
 
-void dfs(int x) {
-	if (check[x] == 0) {
-		check[x] = 1;
-	}
-	for (int i = 0;i < a[x].size(); i++) {
-		if (check[a[x][i]] == 0) {
-			if (check[x] == 1) {
-				check[a[x][i]] = 2
-			}
-			else if {
-				check[a[x][i]] = 1
-			}
+void dfs(int node, int c) {
+	color[node] = c;
+	for (int i = 0; i < a[node].size(); i++) {
+		int next = a[node][i];
+		if (color[next] == 0) {
+			dfs(next, 3 - c);
 		}
 	}
 }
 
-int main(void) {
-	scanf_s("%d", &K);
-	while (K--) {
-		scanf_s("%d %d", &N, &M);
-		for (int i = 0; i < M; i++) {
-			int es, ed;
-			scanf_s("%d %d", &es, &ed);
-			a[es].push_back(ed);
-			a[ed].push_back(es);
-		}
-		dfs(1);
-		bfs(1);
-	}
 
+
+int main(void) {
+	int K, V, E, u, v;
+	scanf("%d ", &K);
+	while (K--) {
+		
+		scanf("%d %d", &V, &E);
+
+		for (int i = 1; i <= V; i++) {
+			a[i].clear();
+			color[i] = 0;
+		}
+		
+		for (int i = 0; i < E; i++) {
+			scanf("%d %d", &u, &v);
+			a[u].push_back(v);
+			a[v].push_back(u);
+		}
+
+		//색칠한다.
+		for (int i = 1; i <= V; i++) {
+			if (color[i] == 0) {
+				dfs(i, 1);
+			}
+		}
+
+		//검사한다.
+		bool OK = true;
+		for (int i = 1; i <= V; i++) {
+			for (int j = 0; j < a[i].size(); j++) {
+				int y = a[i][j];
+				if (color[i] == color[y]) {
+					OK = false;
+				}
+			}
+		}
+
+		printf("%s\n", OK ? "YES" : "NO");
+	}
 	return 0;
 }

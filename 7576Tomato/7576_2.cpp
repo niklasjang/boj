@@ -18,105 +18,88 @@
 여러분은 토마토가 모두 익을 때까지의 최소 날짜를 출력해야 한다. 만약, 저장될 때부터 모든 토마토가 익어있는 상태이면 0을 출력해야 하고, 토마토가 모두 익지는 못하는 상황이면 -1을 출력해야 한다.
 */
 
-#include <iostream>
-#include <list>
+#include <cstdio>
+#include <queue>
+#include <cstring>
+
 using namespace std;
-
-const int MAX = 1000;
-int mat[MAX][MAX][2];  //x, y, day
 int M, N;
-int day= 1;
-list<pair<int, int>> lst; //익은 토마토가 들어있는 위치를 list로 저장함
-list<pair<int, int>>::iterator it, frame;
+int a[1000][1000];
 
-void DayCount(int x, int y) {
-	//상
-	if (x - 1 >= 0) {
-		if (mat[x - 1][y][0] == 0) { //사과가 안익었으면
-			mat[x - 1][y][0] = 1;
-			mat[x - 1][y][1] = day; //몇 번째에 익는지 적음
-			lst.push_back(pair<int, int>(x - 1, y ));
+//           상 하 좌 우
+int dh[] = { -1,1, 0, 0 };
+int dw[] = { 0,0, -1, 1 };
+
+queue<pair<int, int>> q;
+int day = 0;
+
+void bfs(void) {
+	int nw = 0, nh = 0;
+	while (!q.empty()) {
+		
+		//하나 뽑고 
+		pair<int,int> curr = q.front(); q.pop();
+		//사방 넣고
+		for (int k = 0; k < 4; k++) {
+			//index 예외처리
+			nh = curr.first+ dh[k];
+			if (nh < 0 || nh >= N) continue;
+			nw = curr.second+ dw[k];
+			if (nw < 0 || nw >= M) continue;
+			//안익었으면 익히고 day++
+			if (a[nh][nw] == 0) {
+				a[nh][nw] = a[curr.first][curr.second] + 1;
+				if (day < a[curr.first][curr.second] + 1) day = a[curr.first][curr.second] + 1;
+				q.push(make_pair(nh, nw));
+			}
 		}
-	}
-	//하
-	if (x + 1 < N) {
-		if (mat[x + 1][y][0] == 0) { //사과가 안익었으면
-			mat[x + 1][y][0] = 1;
-			mat[x + 1][y][1] = day; //몇 번째에 익는지 적음
-			lst.push_back(pair<int, int>(x + 1, y));
-		}
+
+		//다시 뽑고
 	}
 
-	//좌
-	if (y - 1 >= 0) {
-		if (mat[x][y - 1][0] == 0) { //사과가 안익었으면
-			mat[x][y - 1][0] = 1;
-			mat[x][y - 1][1] = day; //몇 번째에 익는지 적음
-			lst.push_back(pair<int, int>(x, y - 1));
-		}
-	}
-	//우
-	if (y + 1 < M) {
-		if (mat[x][y + 1][0] == 0) { //사과가 안익었으면
-			mat[x][y + 1][0] = 1;
-			mat[x][y + 1][1] = day; //몇 번째에 익는지 적음
-			lst.push_back(pair<int, int>(x, y + 1));
-		}
-	}
 }
 
+
 int main(void) {
-	cin >> M >> N;
-	
-	//토마토 상태 입력
-	for (int i = 0; i < N;i++) {
+
+	bool noZero = true;  //모든 토마토가 익어있는 상태 : 0이 하나도 없는 상태이면 false 아니면 true
+	scanf("%d %d", &M, &N);
+	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < M; j++) {
-			cin >> mat[i][j][0];     //토마토 상태 입력
-			if (mat[i][j][0] == 1) { //익은 토마토를 list에 저장해준다.
-				lst.push_back(pair<int, int>(i, j));
+			scanf("%d", &a[i][j]);
+			if (a[i][j] == 0){
+				noZero = false;
 			}
-			else if (mat[i][j][0] == -1) { //없는 칸의 day는 -1로 둔다.
-				mat[i][j][1] = -1;
+		}
+	}
+
+	//모든 토마토가 익어있는 상태면
+	if (noZero) {
+		printf("0\n");
+		return 0;
+	}
+	//전체를 돌면서 step1에서 안익은 토마토를 q에 다 넣는다
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			if (a[i][j] == 1) {
+				q.push(make_pair(i, j));
 			}
-
 		}
 	}
-	cout << "상태 입력 완료" << "\n";
+	bfs();
 
-	for (int i = 0; i < N;i++) {
+	//익지 못하는 경우가 있으면
+	bool isAllNotRippable = false;
+	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < M; j++) {
-			cout << mat[i][j][0] << " ";
+			if (a[i][j] == 0) isAllNotRippable = true;
 		}
-		cout << "\n";
 	}
-	cout << "출력 완료" << "\n";
-
-	int x = 0, y = 0;
-	//모든 익은 토마토를 한번씩 돌면서 call
-	it = lst.begin();
-	frame = lst.end();
-	do{
-		it = lst.begin();
-		cout << "들어옴" << "\n";
-		for (it = lst.begin(); it != frame; it = lst.begin()) {
-			x = (*it).first;
-			y = (*it).second;
-			DayCount(x, y); // N번째 day에서 주변의 안익은 토마토를 익게 만든다.
-			lst.pop_front();
-		}
-		frame = lst.end();
-	} while (lst.begin() != lst.end());
-	cout << "돌기 완료" << "\n";
-
-
-	for (int i = 0; i < N;i++) {
-		for (int j = 0; j < M; j++) {
-			cout << mat[i][j][1] << " ";
-		}
-		cout << "\n";
+	if (isAllNotRippable) {
+		printf("-1\n");
 	}
-	cout << "출력 완료" << "\n";
-
-
+	else {
+		printf("%d\n", day-1);
+	}
 	return 0;
 }

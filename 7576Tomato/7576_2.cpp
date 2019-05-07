@@ -63,10 +63,10 @@ void bfs(void) {
 int main(void) {
 
 	bool noZero = true;  //모든 토마토가 익어있는 상태 : 0이 하나도 없는 상태이면 false 아니면 true
-	scanf("%d %d", &M, &N);
+	scanf_s("%d %d", &M, &N);
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < M; j++) {
-			scanf("%d", &a[i][j]);
+			scanf_s("%d", &a[i][j]);
 			if (a[i][j] == 0){
 				noZero = false;
 			}

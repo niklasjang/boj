@@ -36,3 +36,12 @@ inline int smaller(int a, int b) { return a < b ? a : b; }
 ans_max = bigger(result, ans_max);
 ans_min = smaller(result, ans_min);
 
+
+8. tuple »ç¿ë¹ý
+
+#include <tuple>
+
+queue<tuple<int, int, int> > q;
+q.push(make_tuple(0,0,0));
+int h, w, p;
+tie(h, w, p) = q.front(); q.pop();

@@ -74,11 +74,11 @@ int bfs(int h, int w) {
 
 int main(void) {
 
-	scanf_s("%d %d", &N, &M);
+	scanf("%d %d", &N, &M);
 
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < M; j++) {
-			scanf_s("%1d", &a[i][j]);
+			scanf("%1d", &a[i][j]);
 		}
 	}
 
